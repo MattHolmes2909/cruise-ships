@@ -1,24 +1,44 @@
 const Ship = require ("../src/ship");
 const Port = require ("../src/port");
+const Itinerary = require ("../src/itinerary");
 
 describe('Ship', () => {
    it("Returns an object", () => {
-   expect(new Ship()).toBeInstanceOf(Object)    
+   const port = new Port('Liverpool');
+   const itinerary = new Itinerary([port]);
+   const ship = new Ship(itinerary)
+    expect(ship).toBeInstanceOf(Object)    
 });
    it("Has a starting port", () => {
-    const ship = new Ship('Liverpool');
-    expect(ship.startingPort).toEqual('Liverpool')   
+    const port = new Port('Liverpool');
+    const itinerary = new Itinerary([port])
+    const ship = new Ship(itinerary);
+    expect(ship.currentPort).toBe(port)  
 });
     it("Can set sail", () => {
-        const ship = new Ship('Liverpool')
+        const belfast = new Port('Belfast')
+        const liverpool = new Port('Liverpool');
+        const itinerary = new Itinerary([belfast, liverpool]);
+        const ship = new Ship(itinerary);
         ship.setSail();
-        expect(ship.startingPort).toBe(false);
+        expect(ship.currentPort).toBeFalsy();
     });
     it("Can dock at different ports", () => {
         const belfast = new Port('Belfast');
-        const ship = new Ship(belfast);
         const liverpool = new Port('Liverpool');
-        ship.dock(liverpool)
+        const itinerary = new Itinerary([belfast, liverpool])
+        const ship = new Ship(itinerary)
+        ship.setSail()
+        ship.dock()
         expect(ship.currentPort).toBe(liverpool)
-    })
+    });
+    it("Doesnt sail past its itinerary", () => {
+        const belfast = new Port('Belfast');
+        const liverpool = new Port('Liverpool');
+        const itinerary = new Itinerary([belfast, liverpool]);
+        const ship = new Ship(itinerary);
+        ship.setSail();
+        ship.dock();
+        expect(() => ship.setSail()).toThrowError('End of itinerary')
+    });
 });
