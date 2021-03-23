@@ -3,26 +3,31 @@ const Port = require ("../src/port");
 const Itinerary = require ("../src/itinerary");
 
 describe('Ship', () => {
-   it("Returns an object", () => {
-   const port = new Port('Liverpool');
-   const itinerary = new Itinerary([port]);
-   const ship = new Ship(itinerary)
+    describe('with ports and an itinerary', () => {
+    let ship;
+    let liverpool;
+    let belfast;
+    let itinerary; 
+        beforeEach(() =>  {     
+        liverpool = new Port('Liverpool');
+        belfast = new Port('Belfast');
+        itinerary = new Itinerary([liverpool, belfast]);
+        ship = new Ship(itinerary);
+    });
+        it("Returns an object", () => {
     expect(ship).toBeInstanceOf(Object)    
 });
    it("Has a starting port", () => {
-    const port = new Port('Liverpool');
-    const itinerary = new Itinerary([port])
-    const ship = new Ship(itinerary);
-    expect(ship.currentPort).toBe(port)  
+    expect(ship.currentPort).toBe(liverpool)  
 });
     it("Can set sail", () => {
-        const belfast = new Port('Belfast')
-        const liverpool = new Port('Liverpool');
-        const itinerary = new Itinerary([belfast, liverpool]);
-        const ship = new Ship(itinerary);
         ship.setSail();
         expect(ship.currentPort).toBeFalsy();
         expect(belfast.ships).not.toContain(ship)
+});
+    it("Gets added to port when created", () => {
+        expect(liverpool.ships).toContain(ship);
+});
 });
     it("Can dock at different ports", () => {
         const belfast = new Port('Belfast');
@@ -41,12 +46,6 @@ describe('Ship', () => {
         ship.setSail();
         ship.dock();
         expect(() => ship.setSail()).toThrowError('End of itinerary')
-});
-    it("Gets added to port when created", () => {
-        const liverpool = new Port("liverpool");
-        const itinerary = new Itinerary([liverpool]);
-        const ship = new Ship(itinerary);
-        expect(liverpool.ships).toContain(ship);
 });
     it("Can dock at different ports", () => {
         const liverpool = new Port('Liverpool');
