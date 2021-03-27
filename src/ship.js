@@ -1,5 +1,6 @@
 class Ship {
     constructor(itinerary) {
+        this.passengers = 0
         this.itinerary = itinerary
         this.currentPort = itinerary.ports[0];
         this.previousPort = null;

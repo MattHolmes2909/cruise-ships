@@ -28,6 +28,9 @@ describe('Ship', () => {
     it("Gets added to port when created", () => {
         expect(liverpool.ships).toContain(ship);
 });
+    it("should start with 0 passengers", () => {
+        expect(ship.passengers).toBe(0);
+    });
 });
     it("Can dock at different ports", () => {
         const belfast = new Port('Belfast');
@@ -39,9 +42,9 @@ describe('Ship', () => {
         expect(ship.currentPort).toBe(liverpool)
 });
     it("Doesnt sail past its itinerary", () => {
-        const belfast = new Port('Belfast');
         const liverpool = new Port('Liverpool');
-        const itinerary = new Itinerary([belfast, liverpool]);
+        const belfast = new Port('Belfast');
+        const itinerary = new Itinerary([liverpool, belfast]);
         const ship = new Ship(itinerary);
         ship.setSail();
         ship.dock();
@@ -56,6 +59,5 @@ describe('Ship', () => {
         ship.dock();
         expect(ship.currentPort).toBe(belfast);
         expect(belfast.ships).toContain(ship);
-    })
-
+});
 });
